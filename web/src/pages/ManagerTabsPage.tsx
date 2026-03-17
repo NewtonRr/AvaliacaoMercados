@@ -1,4 +1,4 @@
-import { FormEvent, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
 import { useConfig } from '../store/configStore';
 import type { ReviewTabConfig } from '../models/review';
@@ -40,7 +40,7 @@ export function ManagerTabsPage() {
     setEditing((current) => (current ? { ...current, [field]: value } : current));
   };
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!editing || !editing.title || !editing.questionText) {
       return;

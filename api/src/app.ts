@@ -1,22 +1,22 @@
-import express from 'express'
-import cors from 'cors'
-import http from 'http'
-import { Server } from 'socket.io'
+import express from 'express';
+import cors from 'cors';
+import http from 'http';
+import { Server } from 'socket.io';
 
 import routes from './routes.ts';
 
 class App {
-  static express: express.Express
-  static server: http.Server
-  static io: Server
+  static express: express.Express;
+  static server: http.Server;
+  static io: Server;
 
   static async init() {
     App.express = express();
     App.server = http.createServer(App.express);
     App.io = new Server(App.server, {
       cors: {
-        origin: "login",
-      }
+        origin: '*',
+      },
     });
 
     // Middleware
