@@ -1,6 +1,7 @@
 type JwtPayload = {
-  sub: string;
-  email: string;
+  sub?: string;
+  email?: string;
+  role?: 'user' | 'admin';
   iat: number;
   exp: number;
 };
@@ -61,12 +62,7 @@ export function decodeJwtPayload(token: string): JwtPayload | null {
   try {
     const json = base64UrlDecode(parts[1]!);
     const payload = JSON.parse(json) as Partial<JwtPayload>;
-    if (
-      typeof payload.email !== 'string' ||
-      typeof payload.sub !== 'string' ||
-      typeof payload.iat !== 'number' ||
-      typeof payload.exp !== 'number'
-    ) {
+    if (typeof payload.iat !== 'number' || typeof payload.exp !== 'number') {
       return null;
     }
     return payload as JwtPayload;
@@ -82,5 +78,33 @@ export function isAuthenticated() {
   if (!payload) return false;
   const nowSeconds = Math.floor(Date.now() / 1000);
   return payload.exp > nowSeconds;
+}
+
+export function getCurrentUser() {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  try {
+      const payload = token.split(".")[1];
+      return JSON.parse(atob(payload)) as { role: "admin" | "user"; [key: string]: unknown };
+  } catch {
+      return null;
+  }
+}
+
+export function getAuthenticatedRole(): 'user' | 'admin' | null {
+  const token = getAuthToken();
+  if (token) {
+    const payload = decodeJwtPayload(token);
+    if (payload?.role === 'user' || payload?.role === 'admin') {
+      return payload.role;
+    }
+  }
+
+  const storedRole = localStorage.getItem('userRole');
+  if (storedRole === 'user' || storedRole === 'admin') {
+    return storedRole;
+  }
+
+  return null;
 }
 

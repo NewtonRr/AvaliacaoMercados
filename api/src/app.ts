@@ -4,6 +4,8 @@ import http from 'http';
 import { Server } from 'socket.io';
 
 import routes from './routes.ts';
+import database from './db/db.ts';
+import Usuario from './models/usuario.ts';
 
 class App {
   static express: express.Express;
@@ -11,6 +13,9 @@ class App {
   static io: Server;
 
   static async init() {
+    await database.authenticate();
+    await Usuario.sync({ alter: true });
+
     App.express = express();
     App.server = http.createServer(App.express);
     App.io = new Server(App.server, {
