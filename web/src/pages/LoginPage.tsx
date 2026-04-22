@@ -44,9 +44,20 @@ export function LoginPage() {
                 }),
             });
 
-            let data: { error?: string; token?: string; usuario?: { role?: "user" | "admin" } } | null = null;
+            let data: {
+                error?: string;
+                token?: string;
+                usuario?: {
+                    role?: "user" | "admin";
+                    idLoja?: string;
+                    id?: number;
+                    email?: string;
+                };
+            } | null = null;
+
             try {
                 data = (await response.json()) as { error?: string; token?: string; usuario?: { role?: "user" | "admin" } };
+                console.log("Resposta do login:", data);
             } catch {
                 data = null;
             }
@@ -73,11 +84,25 @@ export function LoginPage() {
                 }
             }
 
+            const payload = decodeJwtPayload(data.token);
+
             const effectiveRole =
-                data?.usuario?.role ??
-                (decodeJwtPayload(data.token)?.role === "admin" ? "admin" : "user");
-            const rolePath = effectiveRole === "admin" ? "/cadastro" : "/manager";
-            navigate(fromPath ?? rolePath, { replace: true });
+                data?.usuario?.role ?? (payload?.role === "admin" ? "admin" : "user");
+                console.log("Role efetiva:", effectiveRole);
+
+            const idLoja = data?.usuario?.idLoja ?? payload?.IdLoja;
+
+            if (effectiveRole === "admin") {
+                navigate(fromPath ?? "/cadastro", { replace: true });
+            } else {
+                if (!idLoja) {
+                    setError("Loja não encontrada para este usuário.");
+                    return;
+                }
+                localStorage.setItem("idLoja", idLoja);
+
+                navigate(fromPath ?? `/${idLoja}/manager`, { replace: true });
+            }
         } catch {
             setError("Erro de conexao com o servidor.");
         } finally {

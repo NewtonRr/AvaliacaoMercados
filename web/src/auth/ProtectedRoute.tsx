@@ -11,21 +11,23 @@ type ProtectedRouteProps = {
 
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
     const location = useLocation();
-    const user = getCurrentUser(); // { role: "admin" | "user", ... }
+    const user = getCurrentUser();
 
     if (!isAuthenticated()) {
         return <Navigate to="/login" replace state={{ from: location }} />;
     }
 
-    if (allowedRoles && user && !allowedRoles.includes(user.role as Role)) {
-        // Usuário autenticado mas sem permissão — redireciona pelo role dele
-        if (user.role === "user") {
-            return <Navigate to="/manager" replace />;
-        }
-        if (user.role === "admin") {
-            return <Navigate to="/cadastro" replace />;
-        }
+    const idLoja = localStorage.getItem("idLoja");
+
+    const direcionamento = {
+        user: idLoja ? `/${idLoja}/manager` : "/login",
+        admin: "/cadastro"
     }
 
+    if (allowedRoles && user?.role && !allowedRoles.includes(user.role)) {
+        const redirectPath = direcionamento[user.role] ?? "/login";
+        return <Navigate to={redirectPath} replace />;
+}
+ 
     return <>{children}</>;
 }

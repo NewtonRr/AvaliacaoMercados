@@ -2,6 +2,7 @@ type JwtPayload = {
   sub?: string;
   email?: string;
   role?: 'user' | 'admin';
+  IdLoja?: string;
   iat: number;
   exp: number;
 };
@@ -81,7 +82,7 @@ export function isAuthenticated() {
 }
 
 export function getCurrentUser() {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("authToken");
   if (!token) return null;
   try {
       const payload = token.split(".")[1];

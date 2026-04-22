@@ -7,7 +7,9 @@ import { ManagerDashboardPage } from '../pages/ManagerDashboardPage';
 import { LoginPage } from '../pages/LoginPage';
 import { CadastroPage } from '../pages/CadastroPage';
 import { ProtectedRoute } from '../auth/ProtectedRoute';
-
+import { UnauthorizedPage } from '../pages/unauthorized';
+import { UserRoute } from '../auth/userRoute';
+import { AdminRoute } from '../auth/adminRoute';
 
 export default function AppRoutes() {
     return(
@@ -15,36 +17,45 @@ export default function AppRoutes() {
             <Route path="/" element={<Navigate to="/login" replace />} />
             
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
                 <Route
                     path="/cadastro"
                     element={
                         <ProtectedRoute allowedRoles={['admin']}>
-                            <CadastroPage />
+                            <AdminRoute>
+                                <CadastroPage />
+                            </AdminRoute>
                         </ProtectedRoute>
                     }
                 />
                 <Route
-                    path="/kiosk"
+                    path="/:idLoja/kiosk"
                     element={
                         <ProtectedRoute>
-                            <KioskReviewPage />
+                            <UserRoute>
+                                <KioskReviewPage />
+                            </UserRoute>
                         </ProtectedRoute>
                     }
                 />
                 <Route
-                    path="/manager"
+                    path="/:idLoja/manager"
                     element={
                         <ProtectedRoute>
-                            <ManagerTabsPage />
+                            <UserRoute>
+                                <ManagerTabsPage />
+                            </UserRoute>
                         </ProtectedRoute>
                     }
                 />
                 <Route
-                    path="/manager/dashboard"
+                    path="/:idLoja/manager/dashboard"
                     element={
                         <ProtectedRoute>
-                            <ManagerDashboardPage />
+                            <UserRoute>
+                                <ManagerDashboardPage />
+                            </UserRoute>
                         </ProtectedRoute>
                     }
                 />
