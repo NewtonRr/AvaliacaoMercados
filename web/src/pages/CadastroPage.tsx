@@ -48,10 +48,12 @@ export function CadastroPage() {
         setIsSubmitting(true);
 
         try {
+            const token = localStorage.getItem("authToken");
             const response = await fetch(`${apiBaseUrl}/usuarios`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     email: email.trim().toLowerCase(),

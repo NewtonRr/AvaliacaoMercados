@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
-import { useConfig } from '../store/configStore';
+import { useConfig } from '../store/useConfig';
 import type { ReviewTabConfig } from '../models/review';
 
 type EditableTab = ReviewTabConfig;
 
 function createEmptyTab(nextOrder: number): EditableTab {
   return {
-    id: `tab-${Date.now()}`,
+    id: crypto.randomUUID(),
     title: '',
     description: '',
     questionText: '',
@@ -40,13 +40,17 @@ export function ManagerTabsPage() {
     setEditing((current) => (current ? { ...current, [field]: value } : current));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!editing || !editing.title || !editing.questionText) {
       return;
     }
-    upsertTab(editing);
-    setEditing(null);
+    try {
+      await upsertTab(editing);
+      setEditing(null);
+    } catch (error) {
+      console.error('Erro ao salvar aba:', error);
+    }
   };
 
   const handleRemove = (id: string) => {

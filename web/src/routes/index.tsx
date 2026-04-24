@@ -10,6 +10,7 @@ import { ProtectedRoute } from '../auth/ProtectedRoute';
 import { UnauthorizedPage } from '../pages/unauthorized';
 import { UserRoute } from '../auth/userRoute';
 import { AdminRoute } from '../auth/adminRoute';
+import { ConfigProvider } from '../store/configStore';
 
 export default function AppRoutes() {
     return(
@@ -34,7 +35,9 @@ export default function AppRoutes() {
                     element={
                         <ProtectedRoute>
                             <UserRoute>
-                                <KioskReviewPage />
+                                <ConfigProvider>
+                                    <KioskReviewPage />
+                                </ConfigProvider>
                             </UserRoute>
                         </ProtectedRoute>
                     }
@@ -44,7 +47,9 @@ export default function AppRoutes() {
                     element={
                         <ProtectedRoute>
                             <UserRoute>
-                                <ManagerTabsPage />
+                                <ConfigProvider>
+                                    <ManagerTabsPage />
+                                </ConfigProvider>
                             </UserRoute>
                         </ProtectedRoute>
                     }
@@ -54,7 +59,9 @@ export default function AppRoutes() {
                     element={
                         <ProtectedRoute>
                             <UserRoute>
-                                <ManagerDashboardPage />
+                                <ConfigProvider>
+                                    <ManagerDashboardPage />
+                                </ConfigProvider>
                             </UserRoute>
                         </ProtectedRoute>
                     }

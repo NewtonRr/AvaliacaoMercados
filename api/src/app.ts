@@ -6,6 +6,8 @@ import { Server } from 'socket.io';
 import routes from './routes.ts';
 import database from './db/db.ts';
 import Usuario from './models/usuario.ts';
+import CategoriaAvaliacao from './models/categoriaAvaliação.ts';
+import Avaliacao from './models/avaliacao.ts';
 
 class App {
   static express: express.Express;
@@ -15,6 +17,8 @@ class App {
   static async init() {
     await database.authenticate();
     await Usuario.sync({ alter: true });
+    await CategoriaAvaliacao.sync({ alter: true });
+    await Avaliacao.sync({ alter: true });
 
     App.express = express();
     App.server = http.createServer(App.express);
@@ -38,7 +42,13 @@ class App {
     return App.server;
   }
   static routes() {
-    App.express.use(routes)
+    App.express.use(routes);
+    
+    // Error handler
+    App.express.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+      console.error('Erro:', err);
+      res.status(500).json({ error: err.message || 'Erro interno do servidor' });
+    });
   }
 }
 

@@ -14,7 +14,7 @@ export interface ReviewTabConfig {
 }
 
 export interface ReviewResponse {
-  id: string;
+  id?: string;
   tabId: string;
   score: number;
   comment?: string;

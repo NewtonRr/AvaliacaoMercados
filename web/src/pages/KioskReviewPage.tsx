@@ -1,22 +1,19 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
-import { useConfig } from '../store/configStore';
+import { useConfig } from '../store/useConfig';
 import { RatingControl } from '../components/RatingControl';
 import type { ReviewTabConfig } from '../models/review';
 
 export function KioskReviewPage() {
   const { tabs, addResponse } = useConfig();
   const [showThanks, setShowThanks] = useState(false);
-  const idCounterRef = useRef(0);
 
   const activeTabs = tabs
     .filter((tab) => tab.isActive)
     .sort((a, b) => a.order - b.order);
 
   const handleRate = (tab: ReviewTabConfig, score: number) => {
-    idCounterRef.current += 1;
     addResponse({
-      id: `${tab.id}-${idCounterRef.current}`,
       tabId: tab.id,
       score,
       createdAt: new Date().toISOString(),

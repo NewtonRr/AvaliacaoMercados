@@ -1,53 +1,57 @@
-import type { StoreConfig, ReviewResponse } from '../models/review';
+import type { ReviewResponse, ReviewTabConfig } from "../models/review";
 
-const STORAGE_PREFIX = 'shopseg_review_';
-const CONFIG_KEY = `${STORAGE_PREFIX}config_v1`;
-const RESPONSES_KEY = `${STORAGE_PREFIX}responses_v1`;
+const apiBaseUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
-function safeParse<T>(raw: string | null): T | null {
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw) as T;
-  } catch {
-    return null;
-  }
+const authHeader = () => ({
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+});
+
+// Tabs
+export async function fetchTabs(idLoja: string) {
+    const res = await fetch(`${apiBaseUrl}/${idLoja}/tabs`);
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    return res.json();
 }
 
-export function loadConfig(): StoreConfig | null {
-  if (typeof window === 'undefined') {
-    return null;
-  }
-  const raw = window.localStorage.getItem(CONFIG_KEY);
-  return safeParse<StoreConfig>(raw);
+export async function upsertTabApi(idLoja: string, tab: ReviewTabConfig) {
+    const res = await fetch(`${apiBaseUrl}/${idLoja}/tabs`, {
+        method: "POST",
+        headers: authHeader(),
+        body: JSON.stringify(tab),
+    });
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    return res.json();
 }
 
-export function saveConfig(config: StoreConfig) {
-  if (typeof window === 'undefined') {
-    return;
-  }
-  try {
-    window.localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
-  } catch {
-    // ignore write errors for now; manager UI can later surface them
-  }
+export async function removeTabApi(idLoja: string, id: string) {
+    const res = await fetch(`${apiBaseUrl}/${idLoja}/tabs/${id}`, {
+        method: "DELETE",
+        headers: authHeader(),
+    });
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
 }
 
-export function loadResponses(): ReviewResponse[] {
-  if (typeof window === 'undefined') {
-    return [];
-  }
-  const raw = window.localStorage.getItem(RESPONSES_KEY);
-  return safeParse<ReviewResponse[]>(raw) ?? [];
+// Responses
+export async function fetchResponses(idLoja: string) {
+    const res = await fetch(`${apiBaseUrl}/${idLoja}/responses`, {
+        headers: authHeader(),
+    });
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    return res.json();
 }
 
-export function saveResponses(responses: ReviewResponse[]) {
-  if (typeof window === 'undefined') {
-    return;
-  }
-  try {
-    window.localStorage.setItem(RESPONSES_KEY, JSON.stringify(responses));
-  } catch {
-    // ignore write errors for now; manager UI can later surface them
-  }
+export async function addResponseApi(idLoja: string, response: ReviewResponse) {
+    console.log("enviando response:", { idLoja, response });
+    const res = await fetch(`${apiBaseUrl}/${idLoja}/responses`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(response),
+    });
+    if (!res.ok) {
+        const erro = await res.json();
+        console.error("erro do servidor:", erro);
+        throw new Error(`API error: ${res.status}`);
+        }
+    return res.json();
 }
-

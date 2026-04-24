@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { AppShell } from '../components/layout/AppShell';
-import { useConfig } from '../store/configStore';
+import { useConfig } from '../store/useConfig';
 import { computeTabStats } from '../services/analytics';
 
 function formatScoreLabel(score: string) {
@@ -11,7 +11,7 @@ function formatScoreLabel(score: string) {
     case 2:
       return 'Regular';
     case 3:
-      return 'Ótimo'
+      return 'Ótimo';
     default:
       return score;
   }
