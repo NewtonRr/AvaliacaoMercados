@@ -6,18 +6,14 @@ type AppShellVariant = 'kiosk' | 'manager';
 
 interface AppShellProps {
   variant?: AppShellVariant;
-  title?: string;
   children: ReactNode;
 }
 
-export function AppShell({ variant = 'kiosk', title, children }: AppShellProps) {
+export function AppShell({ variant = 'kiosk', children }: AppShellProps) {
   const isManager = variant === 'manager';
   const { idLoja } = useParams<{ idLoja: string }>();
   return (
     <div className={`app-shell app-shell--${variant}`}>
-      <header className="app-shell__header">
-        {title && <h1 className="app-shell__title">{title}</h1>}
-      </header>
       <div className="app-shell__body">
         {isManager && (
           <nav className="app-shell__nav">

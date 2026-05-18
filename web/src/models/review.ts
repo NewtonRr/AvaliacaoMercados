@@ -27,3 +27,7 @@ export interface StoreConfig {
   tabs: ReviewTabConfig[];
 }
 
+export interface PendingScore {
+  tabId: string;
+  score: number;
+};

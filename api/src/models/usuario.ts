@@ -7,20 +7,22 @@ type UsuarioAttributes = {
   senha: string;
   idLoja: string;
   role: "user" | "admin";
+  timer?: number;
   createdAt?: Date;
   updatedAt?: Date;
 };
 
 type UsuarioCreationAttributes = Optional<UsuarioAttributes, "id">;
 
-class  Usuario extends Model<UsuarioAttributes, UsuarioCreationAttributes> implements UsuarioAttributes {
-  public id!: number;
-  public email!: string;
-  public senha!: string;
-  public idLoja!: string;
-  public role!: "user" | "admin";
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+class Usuario extends Model<UsuarioAttributes, UsuarioCreationAttributes> implements UsuarioAttributes {
+  declare id: number;
+  declare email: string;
+  declare senha: string;
+  declare idLoja: string;
+  declare role: "user" | "admin";
+  declare timer?: number;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 Usuario.init(
@@ -50,6 +52,10 @@ Usuario.init(
       type: DataTypes.ENUM("user", "admin"),
       allowNull: false,
       defaultValue: "user",
+    },
+    timer: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
   },
   {

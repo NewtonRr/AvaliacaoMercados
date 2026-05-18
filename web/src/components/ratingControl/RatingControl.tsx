@@ -1,7 +1,7 @@
 import SentimentSatisfiedOutlinedIcon from '@mui/icons-material/SentimentSatisfiedOutlined';
 import SentimentNeutralOutlinedIcon from '@mui/icons-material/SentimentNeutralOutlined';
 import SentimentDissatisfiedOutlinedIcon from '@mui/icons-material/SentimentDissatisfiedOutlined';
-import type { ScaleType } from '../models/review';
+import type { ScaleType } from '../../models/review';
 
 interface RatingControlProps {
   maxScore: number;
@@ -16,13 +16,14 @@ export function RatingControl({ maxScore, scaleType, onSelect }: RatingControlPr
         <button
           type="button"
           className="rating-control__icon-button"
-          onClick={() => onSelect(3)}
+          onClick={() => onSelect(1)}
         >
-          <SentimentSatisfiedOutlinedIcon
+          <SentimentDissatisfiedOutlinedIcon
             className="review-icon"
-            sx={{ fontSize: 80, color: '#4caf50' }}
+            sx={{ fontSize: 80, color: '#f44336' }}
           />
         </button>
+
         <button
           type="button"
           className="rating-control__icon-button"
@@ -33,36 +34,19 @@ export function RatingControl({ maxScore, scaleType, onSelect }: RatingControlPr
             sx={{ fontSize: 80, color: '#ff9800' }}
           />
         </button>
+        
         <button
           type="button"
           className="rating-control__icon-button"
-          onClick={() => onSelect(1)}
+          onClick={() => onSelect(3)}
         >
-          <SentimentDissatisfiedOutlinedIcon
+          <SentimentSatisfiedOutlinedIcon
             className="review-icon"
-            sx={{ fontSize: 80, color: '#f44336' }}
+            sx={{ fontSize: 80, color: '#4caf50' }}
           />
         </button>
       </div>
     );
   }
-
-  return (
-    <div className="rating-control rating-control--stars">
-      {Array.from({ length: maxScore }, (_, index) => {
-        const score = index + 1;
-        return (
-          <button
-            key={score}
-            type="button"
-            className="rating-control__star-button"
-            onClick={() => onSelect(score)}
-          >
-            ★
-          </button>
-        );
-      })}
-    </div>
-  );
 }
 

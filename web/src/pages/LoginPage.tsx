@@ -6,7 +6,7 @@ import { decodeJwtPayload, saveAuthToken } from "../auth/jwt";
 export function LoginPage() {
     const navigate = useNavigate();
     const location = useLocation();
-    const apiBaseUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+    const apiBaseUrl = import.meta.env.VITE_API_URL;
 
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");

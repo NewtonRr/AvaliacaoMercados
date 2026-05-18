@@ -21,7 +21,7 @@ function base64UrlDecode(input: string) {
   return decodeURIComponent(escape(atob(padded)));
 }
 
-export function createFrontendJwt(email: string, ttlSeconds = 60 * 60) {
+export function createJwt(email: string, ttlSeconds = 60 * 60) {
   const nowSeconds = Math.floor(Date.now() / 1000);
   const header = { alg: 'none', typ: 'JWT' };
   const payload: JwtPayload = {
@@ -31,7 +31,6 @@ export function createFrontendJwt(email: string, ttlSeconds = 60 * 60) {
     exp: nowSeconds + ttlSeconds,
   };
 
-  // "alg: none" é suficiente para o cenário atual (somente frontend).
   const encodedHeader = base64UrlEncode(JSON.stringify(header));
   const encodedPayload = base64UrlEncode(JSON.stringify(payload));
   const signature = '';

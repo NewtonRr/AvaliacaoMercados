@@ -134,3 +134,23 @@
 .danger-button:hover {
     background-color: #c62828;
 }
+
+.filter-btn {
+    padding: 6px 10px;
+    margin:8px;
+    border-radius: 6px;
+    border: none;
+    font-size: 0.9rem;
+    background-color: #1976d2;
+    color: #ffffff;
+}
+
+.filter-btn--active {
+    background-color: #0e4788;
+}
+
+.timeout_input {
+    height: 40px;
+    max-width: 4rem;
+    font-size: 1.9rem;
+}

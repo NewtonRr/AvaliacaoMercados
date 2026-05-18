@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 body {
     min-height: 100vh;
     margin: 0;
@@ -8,6 +10,7 @@ body {
     background-repeat: repeat;
     background-size: auto;
     background-position: center;
+    font-family: 'Roboto';
 }
 
 .review-wrapper {
@@ -16,8 +19,8 @@ body {
     align-items: center;
     justify-content: center;
     padding: 32px 48px;
-    max-width: 480px;
-    background: rgba(255, 255, 255, 0.9); /* light card over busy bg */
+    max-width: 700px;
+    background: rgba(185, 221, 255, 0.9); /* light card over busy bg */
     border-radius: 16px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
 }

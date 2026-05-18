@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export function CadastroPage() {
     const navigate = useNavigate();
-    const apiBaseUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+    const apiBaseUrl = import.meta.env.VITE_API_URL;
 
     const [idLoja, setIdLoja] = useState("");
     const [email, setEmail] = useState("");
