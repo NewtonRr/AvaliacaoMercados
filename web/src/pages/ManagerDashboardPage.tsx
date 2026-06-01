@@ -1,77 +1,29 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { AppShell } from '../components/layout/AppShell';
-import { useConfig } from '../store/useConfig';
+import { useConfig } from '../store/configStore';
 import { computeTabStats } from '../services/analytics';
 
 function formatScoreLabel(score: string) {
   const value = Number(score);
   switch (value) {
-    case 1: return 'Ruim';
-    case 2: return 'Regular';
-    case 3: return 'Ótimo';
-    default: return score;
+    case 1:
+      return 'Ruim';
+    case 2:
+      return 'Regular';
+    case 3:
+      return 'Ótimo'
+    default:
+      return score;
   }
 }
 
 export function ManagerDashboardPage() {
   const { tabs, responses } = useConfig();
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
 
-  const filteredResponses = useMemo(() => {
-    if (!startDate && !endDate) return responses;
-
-    return responses.filter((r) => {
-      const date = new Date(r.createdAt);
-      const end = endDate ? new Date(endDate + 'T23:59:59') : null;
-      const start = startDate ? new Date(startDate + 'T00:00:00') : null;
-
-      if (start && date < start) return false;
-      if (end && date > end) return false;
-      return true;
-    });
-  }, [responses, startDate, endDate]);
-
-  const stats = useMemo(
-    () => computeTabStats(tabs, filteredResponses),
-    [tabs, filteredResponses]
-  );
-
-  const handleClear = () => {
-    setStartDate('');
-    setEndDate('');
-  };
+  const stats = useMemo(() => computeTabStats(tabs, responses), [tabs, responses]);
 
   return (
-    <AppShell variant="manager">
-      <div className="dashboard-filters">
-        <label className="filter-date-label">
-          De: 
-          <input
-            type="date"
-            className="filter-date-input"
-            value={startDate}
-            max={endDate || undefined}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-        </label>
-        <label className="filter-date-label">
-          Até: 
-          <input
-            type="date"
-            className="filter-date-input"
-            value={endDate}
-            min={startDate || undefined}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-        </label>
-        {(startDate || endDate) && (
-          <button className="filter-btn" onClick={handleClear}>
-            Limpar filtro
-          </button>
-        )}
-      </div>
-
+    <AppShell variant="manager" title="Dashboard de avaliações">
       <div className="dashboard-grid">
         {stats.map((tab) => (
           <section key={tab.tabId} className="dashboard-card">
@@ -109,3 +61,4 @@ export function ManagerDashboardPage() {
     </AppShell>
   );
 }
+

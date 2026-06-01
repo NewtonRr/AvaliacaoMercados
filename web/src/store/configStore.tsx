@@ -1,60 +1,107 @@
-import { useEffect, useMemo, useState } from 'react';
-import type { ReactNode } from 'react';
-import type { ReviewTabConfig, ReviewResponse } from '../models/review';
-import { fetchTabs, upsertTabApi, removeTabApi, fetchResponses, addResponseApi } from '../services/reviewStorage';
-import { useParams } from 'react-router-dom';
-import { ConfigContext, type ConfigContextValue } from './useConfig';
+import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
+import type { ReviewTabConfig, ReviewResponse, StoreConfig } from '../models/review';
+import { loadConfig, saveConfig, loadResponses, saveResponses } from '../services/reviewStorage';
+
+interface ConfigContextValue {
+  storeConfig: StoreConfig;
+  setStoreConfig: (config: StoreConfig) => void;
+  tabs: ReviewTabConfig[];
+  upsertTab: (tab: ReviewTabConfig) => void;
+  removeTab: (id: string) => void;
+  responses: ReviewResponse[];
+  addResponse: (response: ReviewResponse) => void;
+}
+
+const ConfigContext = createContext<ConfigContextValue | undefined>(undefined);
+
+const defaultTabs: ReviewTabConfig[] = [
+  {
+    id: 'cleanliness',
+    title: 'Limpeza',
+    description: 'Como você avalia a limpeza da loja?',
+    questionText: 'Avalie a limpeza da loja',
+    scaleType: 'faces',
+    maxScore: 3,
+    color: '#4caf50',
+    order: 0,
+    isActive: true,
+  },
+  {
+    id: 'service',
+    title: 'Atendimento',
+    description: 'Como você avalia o atendimento da equipe?',
+    questionText: 'Avalie o atendimento da equipe',
+    scaleType: 'faces',
+    maxScore: 3,
+    color: '#ff9800',
+    order: 1,
+    isActive: true,
+  },
+];
+
+const defaultStoreConfig: StoreConfig = {
+  storeId: 'default',
+  storeName: 'Minha Loja',
+  tabs: defaultTabs,
+};
 
 interface ConfigProviderProps {
   children: ReactNode;
 }
 
 export function ConfigProvider({ children }: ConfigProviderProps) {
-  const { idLoja } = useParams<{ idLoja: string }>();
-  const [tabs, setTabs] = useState<ReviewTabConfig[]>([]);
-  const [responses, setResponses] = useState<ReviewResponse[]>([]);
-  const [loading, setLoading] = useState(true);
-
+  const [storeConfig, setStoreConfig] = useState<StoreConfig>(() => {
+    const stored = loadConfig();
+    return stored ?? defaultStoreConfig;
+  });
+  const [responses, setResponses] = useState<ReviewResponse[]>(() => loadResponses());
 
   useEffect(() => {
-    if (!idLoja) return;
-    Promise.all([fetchTabs(idLoja), fetchResponses(idLoja)])
-      .then(([tabsData, responsesData]) => {
-        setTabs(tabsData);
-        setResponses(responsesData);
-      })
-      .finally(() => setLoading(false));
-  }, [idLoja]);
+    saveConfig(storeConfig);
+  }, [storeConfig]);
+
+  useEffect(() => {
+    saveResponses(responses);
+  }, [responses]);
 
   const value = useMemo<ConfigContextValue>(
     () => ({
-      tabs,
-      loading,
-      responses,
-      upsertTab: async (tab) => {
-        if (!idLoja) {
-          throw new Error('idLoja não encontrado. Verifique a URL.');
-        }
-        const saved = await upsertTabApi(idLoja, tab);
-        setTabs((current) => {
-          const idx = current.findIndex((t) => t.id === saved.id);
-          if (idx === -1) return [...current, saved];
-          const next = [...current];
-          next[idx] = saved;
-          return next;
+      storeConfig,
+      setStoreConfig,
+      tabs: storeConfig.tabs,
+      upsertTab: (tab: ReviewTabConfig) => {
+        setStoreConfig((current) => {
+          const existingIndex = current.tabs.findIndex((t) => t.id === tab.id);
+          if (existingIndex === -1) {
+            return { ...current, tabs: [...current.tabs, tab] };
+          }
+          const nextTabs = current.tabs.slice();
+          nextTabs[existingIndex] = tab;
+          return { ...current, tabs: nextTabs };
         });
       },
-      removeTab: async (id) => {
-        await removeTabApi(idLoja!, id);
-        setTabs((current) => current.filter((t) => t.id !== id));
+      removeTab: (id: string) => {
+        setStoreConfig((current) => ({
+          ...current,
+          tabs: current.tabs.filter((t) => t.id !== id),
+        }));
       },
-      addResponse: async (response) => {
-        const saved = await addResponseApi(idLoja!, response);
-        setResponses((current) => [...current, saved]);
+      responses,
+      addResponse: (response: ReviewResponse) => {
+        setResponses((current) => [...current, response]);
       },
     }),
-    [tabs, responses, loading, idLoja],
+    [storeConfig, responses],
   );
 
   return <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>;
 }
+
+export function useConfig() {
+  const ctx = useContext(ConfigContext);
+  if (!ctx) {
+    throw new Error('useConfig must be used within ConfigProvider');
+  }
+  return ctx;
+}
+
