@@ -16,7 +16,6 @@ export function ConfigProvider({ children }: ConfigProviderProps) {
   const [loading, setLoading] = useState(true);
 
 
-  // Carrega do banco quando a loja mudar
   useEffect(() => {
     if (!idLoja) return;
     Promise.all([fetchTabs(idLoja), fetchResponses(idLoja)])

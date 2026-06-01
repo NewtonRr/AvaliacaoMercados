@@ -10,7 +10,7 @@ export async function fetchTimer(idLoja: string): Promise<number | null> {
   if (!res.ok) throw new Error("Erro ao buscar timer");
 
   const data = await res.json();
-  return data.timer; // number or null
+  return data.timer;
 }
 
 export async function updateTimer(idLoja: string, timer: number): Promise<void> {
@@ -28,7 +28,7 @@ export async function updateTimer(idLoja: string, timer: number): Promise<void> 
 
   if (!res.ok) {
     const errorBody = await res.json().catch(() => ({ message: "Sem resposta JSON" }));
-    console.error("Status:", res.status, "Body:", errorBody); // <-- check this in DevTools
+    console.error("Status:", res.status, "Body:", errorBody);
     throw new Error(errorBody.message ?? "Erro ao atualizar timer");
   }
 }

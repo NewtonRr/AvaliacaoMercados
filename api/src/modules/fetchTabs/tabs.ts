@@ -1,7 +1,7 @@
 import { Router } from "express";
 import authenticate from "../../middlewares/authorization";
 import Avaliacao from "../../models/avaliacao";
-import CategoriaAvaliacao from "../../models/categoriaAvaliação";
+import CategoriaAvaliacao from "../../models/categoriaAvaliacao";
 
 const tabsRouter = Router();
 // Busca tabs da loja

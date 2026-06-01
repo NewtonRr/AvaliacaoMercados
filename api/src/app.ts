@@ -6,7 +6,7 @@ import { Server } from 'socket.io';
 import routes from './routes.ts';
 import database from './db/db.ts';
 import Usuario from './models/usuario.ts';
-import CategoriaAvaliacao from './models/categoriaAvaliação.ts';
+import CategoriaAvaliacao from './models/categoriaAvaliacao.ts';
 import Avaliacao from './models/avaliacao.ts';
 
 class App {
