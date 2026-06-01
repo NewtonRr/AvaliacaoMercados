@@ -1,14 +1,13 @@
-import { useMemo, useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { AppShell } from '../components/layout/AppShell';
-import { useConfig } from '../store/useConfig';
+import { useConfig } from '../store/configStore';
 import type { ReviewTabConfig } from '../models/review';
-import {fetchTimer, updateTimer} from '../components/FunctionTimer/timer';
 
 type EditableTab = ReviewTabConfig;
 
 function createEmptyTab(nextOrder: number): EditableTab {
   return {
-    id: crypto.randomUUID(),
+    id: `tab-${Date.now()}`,
     title: '',
     description: '',
     questionText: '',
@@ -23,35 +22,11 @@ function createEmptyTab(nextOrder: number): EditableTab {
 export function ManagerTabsPage() {
   const { tabs, upsertTab, removeTab } = useConfig();
   const [editing, setEditing] = useState<EditableTab | null>(null);
-  const [timer, setTimer] = useState<number | null>(null);
-  const [input, setInput] = useState<number | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   const orderedTabs = useMemo(
     () => [...tabs].sort((a, b) => a.order - b.order),
     [tabs],
   );
-  const idLoja = localStorage.getItem("idLoja") ?? "";
-
-  useMemo(() => {
-    fetchTimer(idLoja).then((timer) => {
-      if (timer !== null) {
-        setTimer(timer);
-        setInput(timer);
-      }
-    });
-  }, [idLoja]);
-
-  const handleSaveTimer = () => {
-    if (input === null || input < 2) {
-      setError("O timer deve ser um número maior ou igual a 2.");
-      return;
-    }
-    if (input !== null) {
-      updateTimer(idLoja, input).then(() => setTimer(input));
-      setError(null);
-    } 
-  };
 
   const startCreate = () => {
     setEditing(createEmptyTab(orderedTabs.length));
@@ -65,17 +40,13 @@ export function ManagerTabsPage() {
     setEditing((current) => (current ? { ...current, [field]: value } : current));
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     if (!editing || !editing.title || !editing.questionText) {
       return;
     }
-    try {
-      await upsertTab(editing);
-      setEditing(null);
-    } catch (error) {
-      console.error('Erro ao salvar aba:', error);
-    }
+    upsertTab(editing);
+    setEditing(null);
   };
 
   const handleRemove = (id: string) => {
@@ -100,7 +71,7 @@ export function ManagerTabsPage() {
   };
 
   return (
-    <AppShell variant="manager">
+    <AppShell variant="manager" title="Configurar abas de avaliação">
       <div className="manager-tabs-layout">
         <section className="manager-tabs-list">
           <div className="manager-tabs-header">
@@ -212,20 +183,8 @@ export function ManagerTabsPage() {
               </div>
             </form>
           ) : (
-            <div>
-              <p>Selecione uma aba para editar ou crie uma nova.</p>
-              <br></br>
-              <h2>Escolha o tempo de inatividade das abas</h2>
-              <p>Defina o tempo em segundos após o qual a avaliação irá reiniciar por inatividade: <br/>tempo atual = {timer !== null ? timer : 'Não definido'}</p>
-              <input type="number" min={2} defaultValue={timer !== null ? timer : 0} onChange={(e) => setInput(Number(e.target.value))} />
-              <button className="primary-button" onClick={handleSaveTimer}>
-                Salvar
-              </button>
-              <br/>
-              {error && <div className="login-error">{error}</div>}
-            </div>
+            <p>Selecione uma aba para editar ou crie uma nova.</p>
           )}
-          
         </section>
       </div>
     </AppShell>
