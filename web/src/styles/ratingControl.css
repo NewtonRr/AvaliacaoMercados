@@ -1,0 +1,20 @@
+.rating-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.rating-control__icon-button,
+.rating-control__star-button {
+    background: transparent;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.rating-control__star-button {
+    font-size: 2.5rem;
+    color: #ffb300;
+}

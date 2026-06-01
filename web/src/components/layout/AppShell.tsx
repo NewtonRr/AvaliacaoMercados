@@ -1,22 +1,19 @@
-import { ReactNode } from 'react';
-import { NavLink } from 'react-router-dom';
+import type { ReactNode } from 'react';
+import { NavLink, useParams } from 'react-router-dom';
+
 
 type AppShellVariant = 'kiosk' | 'manager';
 
 interface AppShellProps {
   variant?: AppShellVariant;
-  title?: string;
   children: ReactNode;
 }
 
-export function AppShell({ variant = 'kiosk', title, children }: AppShellProps) {
+export function AppShell({ variant = 'kiosk', children }: AppShellProps) {
   const isManager = variant === 'manager';
-
+  const { idLoja } = useParams<{ idLoja: string }>();
   return (
     <div className={`app-shell app-shell--${variant}`}>
-      <header className="app-shell__header">
-        {title && <h1 className="app-shell__title">{title}</h1>}
-      </header>
       <div className="app-shell__body">
         {isManager && (
           <nav className="app-shell__nav">
@@ -24,7 +21,7 @@ export function AppShell({ variant = 'kiosk', title, children }: AppShellProps) 
             <ul className="app-shell__nav-list">
               <li>
                 <NavLink
-                  to="/manager"
+                  to={`/${idLoja}/manager`}
                   className={({ isActive }) =>
                     `app-shell__nav-link${isActive ? ' app-shell__nav-link--active' : ''}`
                   }
@@ -35,7 +32,7 @@ export function AppShell({ variant = 'kiosk', title, children }: AppShellProps) 
               </li>
               <li>
                 <NavLink
-                  to="/manager/dashboard"
+                  to={`/${idLoja}/manager/dashboard`}
                   className={({ isActive }) =>
                     `app-shell__nav-link${isActive ? ' app-shell__nav-link--active' : ''}`
                   }
@@ -45,7 +42,7 @@ export function AppShell({ variant = 'kiosk', title, children }: AppShellProps) 
               </li>
               <li>
                 <NavLink
-                  to="/kiosk"
+                  to={`/${idLoja}/kiosk`}
                   className="app-shell__nav-link"
                 >
                   Visualizar totem
