@@ -1,0 +1,89 @@
+.app-shell {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+
+.app-shell__header {
+    padding: 16px 24px;
+    text-align: center;
+    background-color: #ffffff;
+    border-bottom: #e0e0e0 solid 1px;
+    border-radius: 8px;
+    margin: 16px;
+}
+
+.app-shell__title {
+    margin: 0;
+    font-size: 1.5rem;
+
+}
+
+.app-shell--manager {
+    background-color: #ebf6fd;
+}
+
+.app-shell__body {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+}
+
+.app-shell__nav {
+    width: 220px;
+    padding: 16px 12px;
+    background-color: #ffffff;
+    border-right: 1px solid #e0e0e0;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+}
+
+.app-shell__nav-title {
+    margin: 0 0 12px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #616161;
+}
+
+.app-shell__nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.app-shell__nav-link {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 6px;
+    color: #424242;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.app-shell__nav-link:hover {
+    background-color: #f0f0f0;
+}
+
+.app-shell__nav-link--active {
+    background-color: #1976d2;
+    color: #ffffff;
+}
+
+.app-shell__content {
+    flex: 1;
+    display: flex;
+    max-width: 600px;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    width: 100%;
+    flex-wrap: wrap;
+    align-content: center;
+}

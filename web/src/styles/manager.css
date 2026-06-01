@@ -1,0 +1,156 @@
+.manager-tabs-layout {
+    display: flex;
+    gap: 24px;
+    width: 100%;
+    max-width: 1040px;
+}
+
+.manager-tabs-list {
+    flex: 1.1;
+}
+
+.manager-tab-form-section {
+    flex: 1;
+}
+
+.manager-tabs-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.manager-tabs-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.manager-tab-item {
+    padding: 12px 10px;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.manager-tab-title {
+    font-weight: 600;
+}
+
+.manager-tab-question {
+    font-size: 0.9rem;
+    color: #616161;
+}
+
+.manager-tab-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.manager-tab-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    background-color: #eeeeee;
+    color: #616161;
+}
+
+.manager-tab-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.9rem;
+}
+
+.form-field input[type="text"] {
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #cfcfcf;
+    font-size: 0.95rem;
+}
+
+.form-field--inline {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.primary-button,
+.secondary-button,
+.danger-button {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.primary-button {
+    background-color: #1976d2;
+    color: #ffffff;
+}
+
+.secondary-button {
+    background-color: #eeeeee;
+    color: #424242;
+}
+
+.danger-button {
+    background-color: #d32f2f;
+    color: #ffffff;
+}
+
+.primary-button:hover {
+    background-color: #1565c0;
+}
+
+.secondary-button:hover {
+    background-color: #e0e0e0;
+}
+
+.danger-button:hover {
+    background-color: #c62828;
+}
+
+.filter-btn {
+    padding: 6px 10px;
+    margin:8px;
+    border-radius: 6px;
+    border: none;
+    font-size: 0.9rem;
+    background-color: #1976d2;
+    color: #ffffff;
+}
+
+.filter-btn--active {
+    background-color: #0e4788;
+}
+
+.timeout_input {
+    height: 40px;
+    max-width: 4rem;
+    font-size: 1.9rem;
+}
