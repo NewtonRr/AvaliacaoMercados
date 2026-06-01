@@ -1,10 +1,14 @@
 import { BrowserRouter } from 'react-router-dom';
 import AppRoutes from './routes';
+import { ConfigProvider } from './store/configStore';
 
 function App() {
+
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <ConfigProvider>
+        <AppRoutes />
+      </ConfigProvider>
     </BrowserRouter>
   )
 }
